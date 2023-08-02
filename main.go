@@ -15,6 +15,7 @@ func main() { //main is entry point to the program
 	   	fmt.Println("Get your tickets here to attend.")
 	*/
 
+	// Below can outline some data-types being used
 	fmt.Printf("This section will outline what the data types are:\n\n - conferenceName is '%T'\n - conferenceTickets is '%T'\n - remainingTickets is '%T'\n\n", conferenceName, conferenceTickets, remainingTickets)
 
 	fmt.Printf("Hello and welcome to the %v booking application.\n", conferenceName)

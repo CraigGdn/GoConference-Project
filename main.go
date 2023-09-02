@@ -46,4 +46,4 @@ func main() { //main is entry point to the program
 
 
 
-//Currently on Getting user input section in Youtube 45:19
+//Currently on book ticket logic 53:57

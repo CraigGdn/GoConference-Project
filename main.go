@@ -25,7 +25,7 @@ func main() { //main is entry point to the program
 	var firstName string
 	var lastName string
 	var email string
-	var userTickets int
+	var userTickets uint
 	// ask user for their details
 	fmt.Println("Enter your first name: ")
 	fmt.Scan(&firstName)
@@ -40,10 +40,14 @@ func main() { //main is entry point to the program
 	fmt.Scan(&userTickets)
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
+
+	remainingTickets = remainingTickets - userTickets
+
+	fmt.Printf("%v Tickets are remaining for the %v\n", remainingTickets, conferenceName)
 }
 
 
 
 
 
-//Currently on book ticket logic 53:57
+//Currently on Arrays and Slices 57:16

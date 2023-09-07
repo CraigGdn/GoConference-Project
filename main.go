@@ -22,6 +22,7 @@ func main() { //main is entry point to the program
 	fmt.Printf("We have a total of %v tickets and we have %v remaining tickets available.\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend.")
 
+	bookings := []string{} //when using slices, the array [] should not have any numbers in the square brackets
 	var firstName string
 	var lastName string
 	var email string
@@ -42,12 +43,18 @@ func main() { //main is entry point to the program
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 
 	remainingTickets = remainingTickets - userTickets
+	//bookings[0] = firstName + " " + lastName //this is used for an array but not needed when using slices
+	bookings = append(bookings, firstName+" "+lastName) //this is a slice
+
+	/*
+		fmt.Printf("The whole array: %v\n", bookings) //this will print the value with square brackets and will show upto 50 spaces
+		fmt.Printf("The first value: %v\n", bookings[0])
+		fmt.Printf("Slice type: %T\n", bookings)        //this will print the length (50) and the type (string)
+		fmt.Printf("Slice length: %v\n", len(bookings)) //this will print the length of the array (50)
+	*/
 
 	fmt.Printf("%v Tickets are remaining for the %v\n", remainingTickets, conferenceName)
+	fmt.Printf("These are all of our bookings %v\n", bookings)
 }
-
-
-
-
 
 //Currently on Arrays and Slices 57:16

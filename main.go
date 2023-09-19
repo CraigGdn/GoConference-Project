@@ -45,27 +45,29 @@ func main() { //main is entry point to the program
 		fmt.Println("Enter the number tickets: ")
 		fmt.Scan(&userTickets)
 
-		remainingTickets = remainingTickets - userTickets
-		//bookings[0] = firstName + " " + lastName //this is used for an array but not needed when using slices
-		bookings = append(bookings, firstName+" "+lastName) //this is a slice
+		if userTickets <= remainingTickets {
+			remainingTickets = remainingTickets - userTickets
+			bookings = append(bookings, firstName+" "+lastName) //this is a slice
 
-		/*
-			fmt.Printf("The whole array: %v\n", bookings) //this will print the value with square brackets and will show upto 50 spaces
-			fmt.Printf("The first value: %v\n", bookings[0])
-			fmt.Printf("Slice type: %T\n", bookings)        //this will print the length (50) and the type (string)
-			fmt.Printf("Slice length: %v\n", len(bookings)) //this will print the length of the array (50)
-		*/
-		fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
-		fmt.Printf("%v Tickets are remaining for the %v\n", remainingTickets, conferenceName)
+			fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
+			fmt.Printf("%v Tickets are remaining for the %v\n", remainingTickets, conferenceName)
 
-		firstNames := []string{}
-		for _, booking := range bookings {
-			var names = strings.Fields(booking)
-			//var firstName = names[0]
-			firstNames = append(firstNames, names[0])
+			firstNames := []string{}
+			for _, booking := range bookings {
+				var names = strings.Fields(booking)
+				firstNames = append(firstNames, names[0])
+			}
+			fmt.Printf("The first names of bookings are %v\n \n", firstNames)
+
+			if remainingTickets == 0 {
+				fmt.Println("Our conference is booked out. Come back next year")
+				break
+			}
+		} else {
+			fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
 		}
-		fmt.Printf("The first names of bookings are %v\n \n", firstNames)
+
 	}
 }
 
-//Currently on if...Else Statements and Boolean 1:24:24
+//Currently on User Input validation 1:39:34

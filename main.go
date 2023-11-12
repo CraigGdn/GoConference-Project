@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"goConference/helper"
+	"strconv"
 )
 
 const conferenceTickets = 50
 var conferenceName = "'Go Conference'" // the : causes Go to figure out that the line is a variable. This cannot be done for const or var where the uint is used
 var remainingTickets uint = 50
-var bookings = []string{} //when using slices, the array [] should not have any numbers in the square brackets
+//var bookings = []string{} //when using slices, the array [] should not have any numbers in the square brackets
+var bookings = make([]map[string]string, 0) // this change from line above will create a list of maps instead of a list of strings
 
 func main() { //main is entry point to the program
 
@@ -22,7 +24,7 @@ func main() { //main is entry point to the program
 
 	for {
 		firstName, lastName, email, userTickets := getUserInput()
-		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, email, userTickets)
+		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets) //using 'V' after helper. will import the user package 
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 
@@ -60,18 +62,12 @@ func greetusers() {
 func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
-		var names = strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
+	firstNames = append(firstNames, booking["firstName"])
 	}
 	return firstNames
 }
 
-func validateUserInput(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(email, "@")
-	isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
-	return isValidName, isValidEmail, isValidTicketNumber
-}
+
 
 func getUserInput() (string, string, string, uint) {
 	var firstName string
@@ -96,10 +92,20 @@ func getUserInput() (string, string, string, uint) {
 
 func bookTicket(userTickets uint, firstName string, lastName string, email string) {
 	remainingTickets = remainingTickets - userTickets
-	bookings = append(bookings, firstName+" "+lastName) //this is a slice
+
+	// create a map for a user
+	var userData = make(map[string]string) //cannot mix data types
+	userData["firstName"] = firstName //key value pair
+	userData["lastName"] = lastName //key value pair
+	userData["email"] = email //key value pair
+	userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10) //string conversion takes the uint and formats into a string
+
+
+	bookings = append(bookings, userData) //this is a slice
+	fmt.Printf("List of bookings is %v\n", bookings)
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 	fmt.Printf("%v Tickets are remaining for the %v\n", remainingTickets, conferenceName)
 }
 
-//Currently on Packages in Go
+//Currently on Struct

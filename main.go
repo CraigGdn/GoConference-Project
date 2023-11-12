@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"goConference/helper"
+	"time"
+	"sync"
 )
 
 const conferenceTickets = 50
@@ -16,8 +18,9 @@ type UserData struct {
 	lastName string
 	email string
 	numberOfTickets uint
-
 }
+
+var wg = sync.WaitGroup{} //waits for the launched goroutine to finish. Package "sync" provides basic synchronisation functionality
 
 func main() { //main is entry point to the program
 
@@ -29,20 +32,23 @@ func main() { //main is entry point to the program
 	fmt.Printf("We have a total of %v tickets and we have %v remaining tickets available.\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend.")
 
-	for {
+	//for {
 		firstName, lastName, email, userTickets := getUserInput()
 		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets) //using 'V' after helper. will import the user package 
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 
 			bookTicket(userTickets, firstName, lastName, email)
+
+			wg.Add(1) // sets number of goroutines to wait for (increases the counter by the provided number)
+			go sendTicket(userTickets, firstName, lastName, email) // placing 'go' at the start of this line makes the program become concurrent as it starts a ne go routine
 			firstNames := getFirstNames()
 			fmt.Printf("The first names of bookings are: %v\n", firstNames)
 
 			if remainingTickets == 0 {
 				// end program
 				fmt.Println("Our conference is booked out. Come back next year")
-				break
+				//break
 			}
 		} else {
 			if !isValidName {
@@ -56,8 +62,8 @@ func main() { //main is entry point to the program
 			}
 			fmt.Printf("Your input data is invalid, try again\n")
 		}
-
-	}
+		wg.Wait()
+	//}
 }
 
 func greetusers() {
@@ -122,4 +128,12 @@ func bookTicket(userTickets uint, firstName string, lastName string, email strin
 	fmt.Printf("%v Tickets are remaining for the %v\n", remainingTickets, conferenceName)
 }
 
+func sendTicket(userTickets uint, firstName string, lastName string, email string) {
+	time.Sleep(10 * time.Second)
+	var ticket = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
+	fmt.Println("###################################")
+	fmt.Printf("Sending ticket\n %v \nto email address %v\n", ticket, email)
+	fmt.Println("###################################")
+	wg.Done()
+}
 //Currently on Struct

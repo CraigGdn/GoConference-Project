@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"strings"
+
+	"golang.org/x/tools/go/analysis/passes/bools"
 )
 
 func main() { //main is entry point to the program
@@ -45,7 +47,13 @@ func main() { //main is entry point to the program
 		fmt.Println("Enter the number tickets: ")
 		fmt.Scan(&userTickets)
 
-		if userTickets <= remainingTickets {
+		isValidName := len(firstName) >= 2 && len(lastName) >= 2
+		isValidEmail := strings.Contains(email, "@")
+		isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets 
+
+
+
+		if isValidName && isValidEmail && isValidTicketNumber {
 			remainingTickets = remainingTickets - userTickets
 			bookings = append(bookings, firstName+" "+lastName) //this is a slice
 
@@ -64,7 +72,16 @@ func main() { //main is entry point to the program
 				break
 			}
 		} else {
-			fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
+			if !isValidName {
+				fmt.Println("first name or last name you entered is too short")
+			}
+			if !isValidEmail {
+				fmt.Println("The email you entered is incorrect")
+			}
+			if !isValidTicketNumber {
+				fmt.Println("Number of tickets you entered is invalid")
+			}
+			fmt.Printf("Your input data is invalid, try again\n")
 		}
 
 	}

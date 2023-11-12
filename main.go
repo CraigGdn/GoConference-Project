@@ -3,71 +3,35 @@ package main
 import (
 	"fmt"
 	"strings"
-
-	"golang.org/x/tools/go/analysis/passes/bools"
 )
+
+const conferenceTickets = 50
+var conferenceName = "'Go Conference'" // the : causes Go to figure out that the line is a variable. This cannot be done for const or var where the uint is used
+var remainingTickets uint = 50
+var bookings = []string{} //when using slices, the array [] should not have any numbers in the square brackets
 
 func main() { //main is entry point to the program
 
-	conferenceName := "'Go Conference'" // the : causes Go to figure out that the line is a variable. This cannot be done for const or var where the uint is used
-	const conferenceTickets = 50
-	var remainingTickets uint = 50
-	bookings := []string{} //when using slices, the array [] should not have any numbers in the square brackets
+	greetusers()
 
-	/*
-	   This section was used with Println and is left here to show how the code looked without Printf
+	//fmt.Printf("This section will outline what the data types are:\n\n - conferenceName is '%T'\n - conferenceTickets is '%T'\n - remainingTickets is '%T'\n\n", conferenceName, conferenceTickets, remainingTickets)
 
-	   	fmt.Println("Hello and welcome to the", conferenceName, "booking application. ")
-	   	fmt.Println("We have a total of", conferenceTickets, "and we have", remainingTickets, "remaining available.")
-	   	fmt.Println("Get your tickets here to attend.")
-	*/
-
-	// Below can outline some data-types being used
-	fmt.Printf("This section will outline what the data types are:\n\n - conferenceName is '%T'\n - conferenceTickets is '%T'\n - remainingTickets is '%T'\n\n", conferenceName, conferenceTickets, remainingTickets)
-
-	fmt.Printf("Hello and welcome to the %v booking application.\n", conferenceName)
+	//fmt.Printf("Hello and welcome to the %v booking application.\n", conferenceName)
 	fmt.Printf("We have a total of %v tickets and we have %v remaining tickets available.\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend.")
 
 	for {
-		var firstName string
-		var lastName string
-		var email string
-		var userTickets uint
-		// ask user for their details
-		fmt.Println("Enter your first name: ")
-		fmt.Scan(&firstName)
-
-		fmt.Println("Enter your last name: ")
-		fmt.Scan(&lastName)
-
-		fmt.Println("Enter your email address: ")
-		fmt.Scan(&email)
-
-		fmt.Println("Enter the number tickets: ")
-		fmt.Scan(&userTickets)
-
-		isValidName := len(firstName) >= 2 && len(lastName) >= 2
-		isValidEmail := strings.Contains(email, "@")
-		isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets 
-
-
+		firstName, lastName, email, userTickets := getUserInput()
+		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, email, userTickets)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
-			remainingTickets = remainingTickets - userTickets
-			bookings = append(bookings, firstName+" "+lastName) //this is a slice
 
-			fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
-			fmt.Printf("%v Tickets are remaining for the %v\n", remainingTickets, conferenceName)
-
-			firstNames := []string{}
-			for _, booking := range bookings {
-				var names = strings.Fields(booking)
-				firstNames = append(firstNames, names[0])
-			}
-			fmt.Printf("The first names of bookings are %v\n \n", firstNames)
+			bookTicket(userTickets, firstName, lastName, email)
+			firstNames := getFirstNames()
+			fmt.Printf("The first names of bookings are: %v\n", firstNames)
 
 			if remainingTickets == 0 {
+				// end program
 				fmt.Println("Our conference is booked out. Come back next year")
 				break
 			}
@@ -87,4 +51,55 @@ func main() { //main is entry point to the program
 	}
 }
 
-//Currently on User Input validation 1:39:34
+func greetusers() {
+	fmt.Printf("Hello and welcome to the %v booking application.\n", conferenceName)
+	fmt.Printf("We have a total of %v tickets and we have %v remaining tickets available.\n", conferenceTickets, remainingTickets)
+	fmt.Println("Get your tickets here to attend.")
+}
+
+func getFirstNames() []string {
+	firstNames := []string{}
+	for _, booking := range bookings {
+		var names = strings.Fields(booking)
+		firstNames = append(firstNames, names[0])
+	}
+	return firstNames
+}
+
+func validateUserInput(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
+	isValidName := len(firstName) >= 2 && len(lastName) >= 2
+	isValidEmail := strings.Contains(email, "@")
+	isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
+	return isValidName, isValidEmail, isValidTicketNumber
+}
+
+func getUserInput() (string, string, string, uint) {
+	var firstName string
+	var lastName string
+	var email string
+	var userTickets uint
+	// ask user for their details
+	fmt.Println("Enter your first name: ")
+	fmt.Scan(&firstName)
+
+	fmt.Println("Enter your last name: ")
+	fmt.Scan(&lastName)
+
+	fmt.Println("Enter your email address: ")
+	fmt.Scan(&email)
+
+	fmt.Println("Enter the number tickets: ")
+	fmt.Scan(&userTickets)
+
+	return firstName, lastName, email, userTickets
+}
+
+func bookTicket(userTickets uint, firstName string, lastName string, email string) {
+	remainingTickets = remainingTickets - userTickets
+	bookings = append(bookings, firstName+" "+lastName) //this is a slice
+
+	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
+	fmt.Printf("%v Tickets are remaining for the %v\n", remainingTickets, conferenceName)
+}
+
+//Currently on Packages in Go

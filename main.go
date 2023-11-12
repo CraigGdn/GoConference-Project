@@ -3,14 +3,21 @@ package main
 import (
 	"fmt"
 	"goConference/helper"
-	"strconv"
 )
 
 const conferenceTickets = 50
 var conferenceName = "'Go Conference'" // the : causes Go to figure out that the line is a variable. This cannot be done for const or var where the uint is used
 var remainingTickets uint = 50
 //var bookings = []string{} //when using slices, the array [] should not have any numbers in the square brackets
-var bookings = make([]map[string]string, 0) // this change from line above will create a list of maps instead of a list of strings
+var bookings = make([]UserData, 0) // this change from line above will create a list of maps instead of a list of strings
+
+type UserData struct {
+	firstName string
+	lastName string
+	email string
+	numberOfTickets uint
+
+}
 
 func main() { //main is entry point to the program
 
@@ -62,7 +69,7 @@ func greetusers() {
 func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
-	firstNames = append(firstNames, booking["firstName"])
+	firstNames = append(firstNames, booking.firstName)
 	}
 	return firstNames
 }
@@ -94,12 +101,19 @@ func bookTicket(userTickets uint, firstName string, lastName string, email strin
 	remainingTickets = remainingTickets - userTickets
 
 	// create a map for a user
-	var userData = make(map[string]string) //cannot mix data types
+	var userData = UserData {
+		firstName: firstName,
+		lastName: lastName,
+		email: email,
+		numberOfTickets: userTickets,
+	}
+
+	/* not needed due to above use of struct and UserData
 	userData["firstName"] = firstName //key value pair
 	userData["lastName"] = lastName //key value pair
 	userData["email"] = email //key value pair
 	userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10) //string conversion takes the uint and formats into a string
-
+  */
 
 	bookings = append(bookings, userData) //this is a slice
 	fmt.Printf("List of bookings is %v\n", bookings)

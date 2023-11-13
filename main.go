@@ -10,23 +10,7 @@ import (
 	"strings"
 
 //	"golang.org/x/tools/go/analysis/passes/bools"
->>>>>>> Stashed changes
 )
-
-const conferenceTickets = 50
-var conferenceName = "'Go Conference'" // the : causes Go to figure out that the line is a variable. This cannot be done for const or var where the uint is used
-var remainingTickets uint = 50
-//var bookings = []string{} //when using slices, the array [] should not have any numbers in the square brackets
-var bookings = make([]UserData, 0) // this change from line above will create a list of maps instead of a list of strings
-
-type UserData struct {
-	firstName string
-	lastName string
-	email string
-	numberOfTickets uint
-}
-
-var wg = sync.WaitGroup{} //waits for the launched goroutine to finish. Package "sync" provides basic synchronisation functionality
 
 func main() { //main is entry point to the program
 
@@ -63,7 +47,6 @@ func main() { //main is entry point to the program
 			}
 			fmt.Printf("The first names of bookings are %v\n \n", firstNames)
 			*/
->>>>>>> Stashed changes
 			if remainingTickets == 0 {
 				// end program
 				fmt.Println("Our conference is booked out. Come back next year")

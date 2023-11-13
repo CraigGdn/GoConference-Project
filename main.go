@@ -2,9 +2,15 @@ package main
 
 import (
 	"fmt"
+<<<<<<< Updated upstream
 	"goConference/helper"
 	"time"
 	"sync"
+=======
+	"strings"
+
+//	"golang.org/x/tools/go/analysis/passes/bools"
+>>>>>>> Stashed changes
 )
 
 const conferenceTickets = 50
@@ -38,6 +44,7 @@ func main() { //main is entry point to the program
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 
+<<<<<<< Updated upstream
 			bookTicket(userTickets, firstName, lastName, email)
 
 			wg.Add(1) // sets number of goroutines to wait for (increases the counter by the provided number)
@@ -45,6 +52,18 @@ func main() { //main is entry point to the program
 			firstNames := getFirstNames()
 			fmt.Printf("The first names of bookings are: %v\n", firstNames)
 
+=======
+			fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
+			fmt.Printf("%v Tickets are remaining for the %v\n", remainingTickets, conferenceName)
+			/*
+			firstNames := []string{}
+			for _, booking := range bookings {
+				var names = strings.Fields(booking)
+				firstNames = append(firstNames, names[0])
+			}
+			fmt.Printf("The first names of bookings are %v\n \n", firstNames)
+			*/
+>>>>>>> Stashed changes
 			if remainingTickets == 0 {
 				// end program
 				fmt.Println("Our conference is booked out. Come back next year")
